@@ -166,6 +166,16 @@ func LoadColumnDef(db Queryer, schema, table string) ([]*Column, error) {
 	return cols, nil
 }
 
+func ForeignKeyExists(fks []*ForeignKey, fk *ForeignKey) bool {
+	for _, k := range fks {
+		if k.SourceTableName == fk.SourceTableName &&
+			k.TargetTableName == fk.TargetTableName {
+			return true
+		}
+	}
+	return false
+}
+
 // LoadForeignKeyDef load Postgres fk definition
 func LoadForeignKeyDef(db Queryer, schema string, tbls []*Table, tbl *Table) ([]*ForeignKey, error) {
 	fkDefs, err := db.Query(fkDefSQL, schema, tbl.Name)
@@ -189,6 +199,9 @@ func LoadForeignKeyDef(db Queryer, schema string, tbls []*Table, tbl *Table) ([]
 		if err != nil {
 			return nil, err
 		}
+        if ForeignKeyExists(fks, &fk) {
+            continue;
+        }
 		fks = append(fks, &fk)
 	}
 	for _, fk := range fks {
