@@ -43,7 +43,7 @@ planter postgres://planter@localhost/planter?sslmode=disable \
 Example of usage:
 
 ```
-docker run --network host planter-docker postgresql://indexer:swordfish@localhost/indexer?sslmode=disable --exclude=typeorm_metadata > example.uml
+docker run --network host teamminterest/planter "postgresql://indexer:swordfish@localhost/indexer?sslmode=disable" "--exclude=typeorm_metadata" > result.uml
 ```
 
 ## Help
